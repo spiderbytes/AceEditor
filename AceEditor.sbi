@@ -1,0 +1,280 @@
+﻿DeclareModule AceEditor
+  
+  EnableExplicit
+  
+  Global IsInitialized
+  
+  Declare Init(Callback)
+  
+  Declare BindGadget(Gadget)
+  
+  Declare SetMode(Gadget, Mode.s)
+  Declare SetTheme(Gadget, Theme.s)
+  
+  Declare.s GetValue(Gadget)
+  Declare   SetValue(Gadget, Value.s)
+  
+  Declare Focus(Gadget)
+  Declare Undo(Gadget)
+  Declare Redo(Gadget)
+  
+  Declare Find(Gadget, Needle.s, SearchObject)
+  Declare FindAll(Gadget, String.s)
+  Declare FindNext(Gadget)
+  Declare FindPrevious(Gadget)
+  Declare Indent(Gadget)
+  Declare GotoLine(Gadget, LineNumber, ColumnNumber)
+  Declare Resize(Gadget)
+  
+EndDeclareModule
+
+Module AceEditor
+  
+  EnableExplicit
+  
+  Macro GetSelector
+    !	var selector = $(spider_GadgetID(v_gadget).div).find('.dijitContentPane');
+  EndMacro
+  
+  Macro GetEditor
+    GetSelector
+    ! var editor = selector.data("editor");
+  EndMacro
+  
+  Procedure Init(Callback)  
+    
+    ! require(["https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js"],
+    !   function() {
+    IsInitialized = #True
+    ! 		v_callback();
+    !   }
+    ! );
+    
+  EndProcedure
+  
+  Procedure BindGadget(Gadget)
+    
+    GetSelector
+    
+    ! editor = ace.edit(selector[0]);
+    
+    ! selector.data("editor", editor);
+    
+    ! spider.DojoAspect.after(dijit.byId(spider_GadgetID(v_gadget).gadget.id), "resize", function() {
+    Resize(Gadget)
+    ! });        
+    
+  EndProcedure
+  
+  Procedure SetMode(Gadget, Mode.s)
+    GetEditor
+    ! editor.getSession().setMode("ace/mode/" + v_mode);
+  EndProcedure
+  
+  Procedure SetTheme(Gadget, Theme.s)
+    GetEditor
+    ! editor.setTheme("ace/theme/" + v_theme);
+  EndProcedure
+  
+  Procedure.s GetValue(Gadget)
+    GetEditor
+    ! return editor.getValue();
+  EndProcedure
+  
+  Procedure SetValue(Gadget, Value.s)
+    GetEditor
+    ! editor.setValue(v_value, 1);
+  EndProcedure
+  
+  Procedure Focus(Gadget)
+    GetEditor
+    ! editor.focus();
+  EndProcedure
+  
+  Procedure Undo(Gadget)
+    GetEditor
+    ! editor.undo();
+  EndProcedure
+  
+  Procedure Redo(Gadget)
+    GetEditor
+    ! editor.redo();
+  EndProcedure
+  
+  Procedure Find(Gadget, Needle.s, SearchObject)
+    ; find(String needle, Object options, Boolean animate)
+    GetEditor
+    ! editor.find(v_needle, v_searchobject);
+  EndProcedure
+  
+  Procedure FindAll(Gadget, String.s)
+    ; findAll(String The, Object The, Boolean keeps)  Number
+    GetEditor
+    ! editor.findAll(v_string);
+  EndProcedure
+  
+  Procedure FindNext(Gadget)
+    ; findNext(Object options, Boolean animate)
+    GetEditor
+    ! editor.findNext();
+  EndProcedure
+  
+  Procedure FindPrevious(Gadget)
+    ; findPrevious(Object options, Boolean animate)
+    GetEditor
+    ! editor.findPrevious();
+  EndProcedure
+  
+  Procedure Indent(Gadget)
+    ; findPrevious(Object options, Boolean animate)
+    GetEditor
+    ! editor.indent();
+  EndProcedure
+  
+  Procedure GotoLine(Gadget, LineNumber, ColumnNumber)
+    ; gotoLine(Number lineNumber, Number column, Boolean animate)
+    GetEditor
+    ! editor.gotoLine(v_linenumber, v_columnnumber);
+  EndProcedure
+  
+  Procedure Resize(Gadget)
+    ; resize(Boolean force)
+    GetEditor
+    ! editor.resize(true);
+  EndProcedure
+    
+  Procedure ToDo()
+    
+    ; addSelectionMarker(Range orientedRange)  Range
+    ; alignCursors()
+    ; blockOutdent()
+    ; blur()
+    ; centerSelection()
+    ; clearSelection()
+    ; copyLinesDown()  Number
+    ; copyLinesUp()  Number
+    ; destroy()
+    ; duplicateSelection() Undocumented
+    ; execCommand() Undocumented
+    ; exitMultiSelectMode()
+    ; + find(String needle, Object options, Boolean animate)
+    ; + findAll(String The, Object The, Boolean keeps)  Number
+    ; + findNext(Object options, Boolean animate)
+    ; + findPrevious(Object options, Boolean animate)
+    ; + focus()
+    ; forEachSelection(String cmd, String args)
+    ; getAnimatedScroll() Undocumented
+    ; getBehavioursEnabled()  Boolean
+    ; getCopyText()  String
+    ; getCursorPosition()  Object
+    ; getCursorPositionScreen()  Number
+    ; getDisplayIndentGuides() Undocumented
+    ; getDragDelay()  Number
+    ; getFadeFoldWidgets() Undocumented
+    ; getFirstVisibleRow()  Number
+    ; getHighlightActiveLine()  Boolean
+    ; getHighlightGutterLine() Undocumented
+    ; getHighlightSelectedWord()  Boolean
+    ; getKeyboardHandler()  String
+    ; getLastSearchOptions()  Object
+    ; getLastVisibleRow()  Number
+    ; getNumberAt(Object row, Object column)  Number
+    ; getOverwrite()  Boolean
+    ; getPrintMarginColumn()  Number
+    ; getReadOnly()  Boolean
+    ; getScrollSpeed()  Number
+    ; getSelection()  Selection
+    ; getSelectionRange()  Range
+    ; getSelectionStyle()  String
+    ; getSession()  EditSession
+    ; getShowFoldWidgets()  Boolean
+    ; getShowInvisibles()  Boolean
+    ; getShowPrintMargin()  Boolean
+    ; getTheme()  String
+    ; + getValue()  String
+    ; getWrapBehavioursEnabled()
+    ; + gotoLine(Number lineNumber, Number column, Boolean animate)
+    ; gotoPageDown()
+    ; gotoPageUp()
+    ; + indent()
+    ; insert(String text)
+    ; isFocused()  Boolean
+    ; isRowFullyVisible(Number row)  Boolean
+    ; isRowVisible(Number row)  Boolean
+    ; jumpToMatching(Object select)
+    ; modifyNumber(Number amount)
+    ; moveCursorTo(Number row, Number column)
+    ; moveCursorToPosition(Object pos)
+    ; moveLinesDown()  Number
+    ; moveLinesUp()  Number
+    ; moveText() Undocumented
+    ; navigateDown(Number times)
+    ; navigateFileEnd()
+    ; navigateFileStart()
+    ; navigateLeft(Number times)
+    ; navigateLineEnd()
+    ; navigateLineStart()
+    ; navigateRight(Number times)
+    ; navigateTo(Number row, Number column)
+    ; navigateUp(Number times)
+    ; navigateWordLeft()
+    ; navigateWordRight()
+    ; + redo()
+    ; remove(String dir)
+    ; removeLines()
+    ; removeSelectionMarker(Range The)
+    ; removeToLineEnd()
+    ; removeToLineStart()
+    ; removeWordLeft()
+    ; removeWordRight()
+    ; replace(String replacement, Object options)
+    ; replaceAll(String replacement, Object options)
+    ; resize(Boolean force)
+    ; revealRange() Undocumented
+    ; scrollPageDown()
+    ; scrollPageUp()
+    ; scrollToLine(Number line, Boolean center, Boolean animate, Function callback)
+    ; scrollToRow(Object row)
+    ; selectAll()
+    ; selectMore(Number dir, Boolean skip)
+    ; selectMoreLines(Number dir, Boolean skip)
+    ; selectPageDown()
+    ; selectPageUp()
+    ; setAnimatedScroll() Undocumented
+    ; setBehavioursEnabled(Boolean enabled)
+    ; setDisplayIndentGuides() Undocumented
+    ; setDragDelay(Number dragDelay)
+    ; setFadeFoldWidgets() Undocumented
+    ; setFontSize(Number size)
+    ; setHighlightActiveLine(Boolean shouldHighlight)
+    ; setHighlightGutterLine() Undocumented
+    ; setHighlightSelectedWord(Boolean shouldHighlight)
+    ; setKeyboardHandler(String keyboardHandler)
+    ; setOverwrite(Boolean overwrite)
+    ; setPrintMarginColumn(Number showPrintMargin)
+    ; setReadOnly(Boolean readOnly)
+    ; setScrollSpeed(Number speed)
+    ; setSelectionStyle(String style)
+    ; setSession(EditSession session)
+    ; setShowFoldWidgets(Boolean show)
+    ; setShowInvisibles(Boolean showInvisibles)
+    ; setShowPrintMargin(Boolean showPrintMargin)
+    ; setStyle(String style)
+    ; setTheme(String theme)
+    ; + setValue(String val, Number cursorPos)  String
+    ; setWrapBehavioursEnabled(Boolean enabled)
+    ; sortLines() Undocumented
+    ; splitLine()
+    ; toLowerCase()
+    ; toUpperCase()
+    ; toggleCommentLines()
+    ; toggleOverwrite()
+    ; transposeLetters()
+    ; transposeSelections(Number dir)
+    ; + undo()
+    ; unsetStyle(Object style)
+    ; updateSelectionMarkers()  
+    
+  EndProcedure
+      
+EndModule

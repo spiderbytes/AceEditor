@@ -1,0 +1,137 @@
+﻿XIncludeFile "AceEditor.sbi"
+
+EnableExplicit
+
+Enumeration
+  #Window
+  #Toolbar
+  #Toolbar_New
+  #Toolbar_Open
+  #Toolbar_Save
+  #Toolbar_Search
+  #AceEditor
+EndEnumeration
+
+#dijitEditorIconNewPage = "dijitEditorIcon dijitEditorIconNewPage"
+#dijitIconFolderOpen    = "dijitIconFolderOpen"
+#dijitIconSave          = "dijitIconSave"
+#dijitIconSearch        = "dijitIconSearch"
+
+Procedure.s GetTestSource()
+  
+  Protected TestSource.s 
+  
+  TestSource = "function ValidFunction() {" + #CRLF$ + #CRLF$ +
+               "  alert('Hello World');" + #CRLF$ + #CRLF$ +
+               "}" + #CRLF$ + #CRLF$ + 
+               "function InvalidFunction( {" + #CRLF$ + #CRLF$ +
+               "}" + #CRLF$
+  
+  ProcedureReturn TestSource
+  
+EndProcedure
+
+Procedure ToolBarStandardButton(Button, ButtonIcon.s, Mode = #PB_ToolBar_Normal, Text.s = "")
+  
+  ; see: http://forums.spiderbasic.com/viewtopic.php?p=3581#p3581
+  
+  ToolBarImageButton(Button, 0, Mode)
+  ! var b = spider.toolbar.current.buttons[v_button];
+  ! var i = $(b.domNode).find(".dijitIcon");
+  ! i.addClass(v_buttonicon);
+  
+  If Text <> ""
+    ! var s = $(b.domNode).find(".dijitButtonText");
+    ! s.removeClass("dijitDisplayNone");
+    ! s.text(v_text);
+  EndIf
+  
+EndProcedure
+
+Procedure MenuEvent()
+  
+  Select EventMenu()
+      
+    Case #Toolbar_New
+      AceEditor::SetValue(#AceEditor, "")
+      
+    Case #Toolbar_Open
+      ! alert("not implemented");
+      
+    Case #Toolbar_Save
+      ! alert("not implemented");
+      
+    Case #Toolbar_Search
+      
+      Protected SearchString.s = "World"
+      
+      Protected SearchObject
+      
+      ! v_searchobject = {
+      !   backwards : false,     // Whether to search backwards from where cursor currently is. Defaults to false.
+      !   wrap : false,          // Whether to wrap the search back to the beginning when it hits the end. Defaults to false.
+      !   caseSensitive : false, // Whether the search ought to be case-sensitive. Defaults to false.
+      !   wholeWord : false,     // Whether the search matches only on whole words. Defaults to false.
+      !   range : null,          // The Range to search within. Set this to null for the whole document
+      !   regExp : false,        // Whether the search is a regular expression or not. Defaults to false.
+      !   start : 0,             // The starting Range or cursor position to begin the search
+      !   skipCurrent : false    // Whether or not to include the current line in the search. Default to false.  
+      ! }
+      
+      AceEditor::Find(#AceEditor, SearchString, SearchObject)
+      AceEditor::FindNext(#AceEditor)
+      AceEditor::FindPrevious(#AceEditor)
+      AceEditor::Focus(#AceEditor)
+            
+  EndSelect      
+  
+EndProcedure
+
+Procedure SizeWindowEvent()
+  
+  ResizeGadget(#AceEditor, #PB_Ignore, #PB_Ignore, WindowWidth(#Window), WindowHeight(#Window) - ToolBarHeight(#Toolbar))
+  
+EndProcedure
+  
+Procedure Main()
+  
+  OpenWindow(#Window, #PB_Ignore, #PB_Ignore, 800, 600, "AceEditorDemo", #PB_Window_ScreenCentered | #PB_Window_SizeGadget)
+  
+  CreateToolBar(#Toolbar, WindowID(#Window))
+  
+  ToolBarStandardButton(#Toolbar_New, #dijitEditorIconNewPage)
+  ToolBarToolTip(#Toolbar, #Toolbar_New, "New")
+  
+  ToolBarStandardButton(#Toolbar_Open, #dijitIconFolderOpen)
+  ToolBarToolTip(#Toolbar, #Toolbar_Open, "Open...")
+  
+  ToolBarStandardButton(#Toolbar_Save, #dijitIconSave)  
+  ToolBarToolTip(#Toolbar, #Toolbar_Save, "Save...")
+  
+  ToolBarSeparator()
+  
+  ToolBarStandardButton(#Toolbar_Search, #dijitIconSearch)  
+  ToolBarToolTip(#Toolbar, #Toolbar_Search, "Search 'World'")
+  
+  ContainerGadget(#AceEditor, 0, 0, WindowWidth(#Window), WindowHeight(#Window) - ToolBarHeight(#Toolbar))
+  CloseGadgetList()
+  
+  AceEditor::BindGadget(#AceEditor)
+  
+  AceEditor::SetTheme(#AceEditor, "chrome")
+  AceEditor::SetMode (#AceEditor, "javascript")
+  
+  ; (Overview of themes and modes: https://ace.c9.io/build/kitchen-sink.html)
+  
+  AceEditor::SetValue(#AceEditor, GetTestSource())
+  
+  AceEditor::Focus(#AceEditor)
+  
+  AceEditor::GotoLine(#AceEditor, 2, 2)
+  
+  BindEvent(#PB_Event_Menu, @MenuEvent())
+  BindEvent(#PB_Event_SizeWindow, @SizeWindowEvent())
+  
+EndProcedure
+
+AceEditor::Init(@Main())
