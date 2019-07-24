@@ -2,9 +2,18 @@
   
   EnableExplicit
   
+  Enumeration
+    #cdnjs          ;Default
+    #PageCDN
+    #locInc
+    #locIncAce
+    #locAce
+  EndEnumeration
+  
+  
   Global IsInitialized
   
-  Declare Init(Callback)
+  Declare Init(Callback, Pluginloadplace = #cdnjs, Version.s = "1.2.6")
   
   Declare BindGadget(Gadget)
   
@@ -41,9 +50,23 @@ Module AceEditor
     ! var editor = selector.data("editor");
   EndMacro
   
-  Procedure Init(Callback)  
+  Procedure Init(Callback, Pluginloadplace = #cdnjs, Version.s = "1.2.6")  
+    Protected AceUrl.s
     
-    ! require(["https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js"],
+    Select Pluginloadplace
+      Case #PageCDN
+        AceUrl = "https://pagecdn.io/lib/ace/"
+      Case #locInc
+        AceUrl = "inc/"
+      Case #locIncAce
+        AceUrl = "inc/ace/"
+      Case #locAce
+        AceUrl = "ace/"
+      Default         ;       Case #cdnjs ist Default
+        AceUrl = "https://cdnjs.cloudflare.com/ajax/libs/ace/"
+    EndSelect
+    Debug AceUrl + Version + "/ace.js"
+    ! require([v_aceurl + v_version + "/ace.js"],
     !   function() {
     IsInitialized = #True
     ! 		v_callback();
@@ -278,3 +301,14 @@ Module AceEditor
   EndProcedure
       
 EndModule
+
+; IDE Options = SpiderBasic 2.21 (Linux - x64)
+; CursorPosition = 61
+; FirstLine = 35
+; Folding = ----
+; WindowTheme = flat
+; GadgetTheme = flat
+; iOSAppOrientation = 0
+; AndroidAppOrientation = 0
+; EnableXP
+; CompileSourceDirectory
