@@ -301,14 +301,3 @@ Module AceEditor
   EndProcedure
       
 EndModule
-
-; IDE Options = SpiderBasic 2.21 (Linux - x64)
-; CursorPosition = 61
-; FirstLine = 35
-; Folding = ----
-; WindowTheme = flat
-; GadgetTheme = flat
-; iOSAppOrientation = 0
-; AndroidAppOrientation = 0
-; EnableXP
-; CompileSourceDirectory
